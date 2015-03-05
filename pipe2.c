@@ -4,25 +4,29 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-/* max  receiving buffer size; Note: no check or enforcement is made on this value*/
+/* max  receiving buffer size*/
+
 #define BUF_SIZE 256
 
 int main()
 {
+/* Create pipe file descriptors*/
     int pfd1[2];
     int pfd2[2];
     int pfd3[3];
 
-    ssize_t numRead = -1;
-    /* Note: working under the assumption that the messages
-       are of equal length*/
+    ssize_t numRead = -1; //blocks to read
+
     const char* messageOne = "Hello I am child ONE.\n";
     const char* messageTwo = "Hello I am child TWO.\n";
     const char* messageThree="Hello I am child THREE.\n";
 
-    const unsigned int commLen = strlen(messageOne) + 1;
+    /* Working with messageThree as the longest */
+    const unsigned int commLen = strlen(messageThree) + 1;
 
     char buf[BUF_SIZE];
+ 
+/* Call pipe thrice to create the 3 pipe. Using simple error checking*/
 
     if (pipe(pfd1) == -1)
     {
@@ -42,7 +46,9 @@ int main()
     }
     printf("Pipes opened. Forking ...\n");
 
-    // child 1
+    /* Define the behaviour of each child process created using fork */
+
+/* Child 1 */
     switch (fork())
     {
         case -1:
@@ -125,7 +131,7 @@ int main()
             break;
     } // end child 1
 
-    // child 2
+    /* Child 2 */
     switch (fork())
     {
         case -1:
@@ -201,9 +207,9 @@ int main()
 
         default:
             break;
-    }
+    } // end children
 
-     // child 3
+     /*child 3 */
     switch (fork())
     {
         case -1:
@@ -279,7 +285,7 @@ int main()
 
         default:
             break;
-    }
+    } // end child 3
 
     if (close(pfd1[0]) == -1)
     {
