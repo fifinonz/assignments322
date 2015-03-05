@@ -17,9 +17,9 @@ int main()
 
     ssize_t numRead = -1; //blocks to read
 
-    const char* messageOne = "Hello I am child ONE.\n";
-    const char* messageTwo = "Hello I am child TWO.\n";
-    const char* messageThree="Hello I am child THREE.\n";
+    const char* messageOne = "Hello I am child 1.\n";
+    const char* messageTwo = "Hello I am child 2.\n";
+    const char* messageThree="Hello I am child 3.\n";
 
     /* Working with messageThree as the longest */
     const unsigned int commLen = strlen(messageThree) + 1;
@@ -88,25 +88,7 @@ int main()
                 printf("Error closing writing end of pipe 1.\n");
                 _exit(1);
             }
-
-            /* reading from pipe 2 */
-            numRead = read(pfd2[0], buf, commLen);
-            if (numRead == -1)
-            {
-                printf("Error reading from pipe 2.\n");
-                _exit(1);
-            }
-	    else 
-	    {
-		 printf("To Child 1:  %s", buf);
-	    }
-
-            if (close(pfd2[0]) == -1)
-            {
-                printf("Error closing reding end of pipe 2.\n");
-                _exit(1);
-            }
- 		 /* reading from pipe 3 */
+  /* reading from pipe 3 */
             numRead = read(pfd3[0], buf, commLen);
             if (numRead == -1)
             {
@@ -123,6 +105,24 @@ int main()
                 printf("Error closing reading end of pipe 3.\n");
                 _exit(1);
             }
+ /* reading from pipe 2 */
+            numRead = read(pfd2[0], buf, commLen);
+            if (numRead == -1)
+            {
+                printf("Error reading from pipe 2.\n");
+                _exit(1);
+            }
+	    else 
+	    {
+		 printf("To Child 1:  %s", buf);
+	    }
+
+            if (close(pfd2[0]) == -1)
+            {
+                printf("Error closing reding end of pipe 2.\n");
+                _exit(1);
+            }
+
             
           printf("\nChild 1 ID: %d exiting...\n", getpid());
             _exit(0);
@@ -170,29 +170,13 @@ int main()
                 printf("Error closing writing end of pipe 2.");
                 _exit(EXIT_FAILURE);
             }
-
-            /* read from the first pipe */
-            if (read(pfd1[0], buf, commLen) == -1)
-            {
-                printf("Error reading from pipe 1.\n");
-                _exit(EXIT_FAILURE);
-            }
-		 else 
-	    {
-		 printf("To Child 2:  %s", buf);
-	    }
-            if (close(pfd1[0]) == -1)
-            {
-                printf("Error closing reading end of pipe 1.\n");
-                _exit(EXIT_FAILURE);
-            }
-  /* read from the third pipe */
+ /* read from the third pipe */
             if (read(pfd3[0], buf, commLen) == -1)
             {
                 printf("Error reading from pipe 3.\n");
                 _exit(EXIT_FAILURE);
             }
-		 else 
+           else 
 	    {
 		 printf("To Child 2:  %s", buf);
 	    }
@@ -201,6 +185,22 @@ int main()
                 printf("Error closing reading end of pipe 3.\n");
                 _exit(EXIT_FAILURE);
             }
+/* read from the first pipe */
+            if (read(pfd1[0], buf, commLen) == -1)
+            {
+                printf("Error reading from pipe 1.\n");
+                _exit(EXIT_FAILURE);
+            }
+	    else 
+	    {
+		 printf("To Child 2:  %s", buf);
+	    }
+            if (close(pfd1[0]) == -1)
+            {
+                printf("Error closing reading end of pipe 1.\n");
+                _exit(EXIT_FAILURE);
+            }
+ 
            
             printf("\nChild 2 ID: %d exiting...\n", getpid());
             _exit(EXIT_SUCCESS);
@@ -249,21 +249,7 @@ int main()
                 _exit(EXIT_FAILURE);
             }
 
-            /* read from the first pipe */
-            if (read(pfd1[0], buf, commLen) == -1)
-            {
-                printf("Error reading from pipe 1.\n");
-                _exit(EXIT_FAILURE);
-            }
-		 else 
-	    {
-		 printf("To Child 3:  %s", buf);
-	    }
-            if (close(pfd1[0]) == -1)
-            {
-                printf("Error closing reading end of pipe 1.\n");
-                _exit(EXIT_FAILURE);
-            }
+           
   /* read from the second pipe */
             if (read(pfd2[0], buf, commLen) == -1)
             {
@@ -277,6 +263,22 @@ int main()
             if (close(pfd2[0]) == -1)
             {
                 printf("Error closing reading end of pipe 2.\n");
+                _exit(EXIT_FAILURE);
+            }
+
+ /* read from the first pipe */
+            if (read(pfd1[0], buf, commLen) == -1)
+            {
+                printf("Error reading from pipe 1.\n");
+                _exit(EXIT_FAILURE);
+            }
+		 else 
+	    {
+		 printf("To Child 3:  %s", buf);
+	    }
+            if (close(pfd1[0]) == -1)
+            {
+                printf("Error closing reading end of pipe 1.\n");
                 _exit(EXIT_FAILURE);
             }
            
