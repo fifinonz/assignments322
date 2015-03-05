@@ -26,7 +26,7 @@ int main()
 
     char buf[BUF_SIZE];
  
-/* Call pipe thrice to create the 3 pipe. Using simple error checking*/
+/* Call pipe thrice to create the 3 pipes. Using simple error checking*/
 
     if (pipe(pfd1) == -1)
     {
@@ -170,7 +170,7 @@ int main()
                 printf("Error closing writing end of pipe 2.");
                 _exit(EXIT_FAILURE);
             }
- /* read from the third pipe */
+/* read from the third pipe */
             if (read(pfd3[0], buf, commLen) == -1)
             {
                 printf("Error reading from pipe 3.\n");
@@ -185,6 +185,8 @@ int main()
                 printf("Error closing reading end of pipe 3.\n");
                 _exit(EXIT_FAILURE);
             }
+            
+
 /* read from the first pipe */
             if (read(pfd1[0], buf, commLen) == -1)
             {
@@ -201,7 +203,6 @@ int main()
                 _exit(EXIT_FAILURE);
             }
  
-           
             printf("\nChild 2 ID: %d exiting...\n", getpid());
             _exit(EXIT_SUCCESS);
 
@@ -249,6 +250,21 @@ int main()
                 _exit(EXIT_FAILURE);
             }
 
+/* read from the first pipe */
+            if (read(pfd1[0], buf, commLen) == -1)
+            {
+                printf("Error reading from pipe 1.\n");
+                _exit(EXIT_FAILURE);
+            }
+		 else 
+	    {
+		 printf("To Child 3:  %s", buf);
+	    }
+            if (close(pfd1[0]) == -1)
+            {
+                printf("Error closing reading end of pipe 1.\n");
+                _exit(EXIT_FAILURE);
+            }
            
   /* read from the second pipe */
             if (read(pfd2[0], buf, commLen) == -1)
@@ -266,21 +282,7 @@ int main()
                 _exit(EXIT_FAILURE);
             }
 
- /* read from the first pipe */
-            if (read(pfd1[0], buf, commLen) == -1)
-            {
-                printf("Error reading from pipe 1.\n");
-                _exit(EXIT_FAILURE);
-            }
-		 else 
-	    {
-		 printf("To Child 3:  %s", buf);
-	    }
-            if (close(pfd1[0]) == -1)
-            {
-                printf("Error closing reading end of pipe 1.\n");
-                _exit(EXIT_FAILURE);
-            }
+ 
            
             printf("\nChild 3 ID: %d exiting...\n", getpid());
             _exit(EXIT_SUCCESS);
@@ -289,7 +291,7 @@ int main()
             break;
     } // end child 3
 
-    if (close(pfd1[0]) == -1)
+  /* if (close(pfd1[0]) == -1)
     {
         printf("Error closing reading end of the pipe.\n");
         exit(EXIT_FAILURE);
@@ -312,7 +314,7 @@ int main()
         printf("Error closing writing end of the pipe.\n");
         exit(EXIT_FAILURE);
     }
-/*  if (close(pfd3[1]) == -1)
+ if (close(pfd3[1]) == -1)
     {
         printf("Error closing writing end of the pipe.\n");
         exit(EXIT_FAILURE);
@@ -324,14 +326,13 @@ int main()
         exit(EXIT_FAILURE);
     }
 */
-    printf("Parent waiting for children completion...\n");
+   
     if (wait(NULL) == -1)
     {
         printf("Error waiting.\n");
         exit(EXIT_FAILURE);
     }
-
-	printf("Parent closing pipes.\n");
-	 printf("Parent finishing.\n");
+	
     exit(EXIT_SUCCESS);
-}
+
+} // end main
